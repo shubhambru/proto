@@ -9,7 +9,7 @@
 # Package stage
 #
 FROM openjdk:17-jdk-slim
-COPY --from=build /target/proto-0.0.1-SNAPSHOT.jar proto.jar
+COPY ./target/proto-0.0.1-SNAPSHOT.jar proto.jar
 # ENV PORT=8080
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","proto.jar"]
