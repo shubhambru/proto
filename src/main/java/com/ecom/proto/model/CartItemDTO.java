@@ -30,4 +30,20 @@ public class CartItemDTO {
         this.uid = uid;
     }
 
+    public Long getItem_id() {
+        return item_id;
+    }
+
+    public Long getProduct_id() {
+        return product_id;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Long getUid() {
+        return uid;
+    }
+
 }
