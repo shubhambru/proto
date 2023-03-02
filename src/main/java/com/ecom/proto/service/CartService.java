@@ -22,26 +22,31 @@ public class CartService {
         try {
             if(authService.validateToken(token)) {
                 long uid = authService.getUidFromToken(token);
+                List<CartItemDTO> cartItems = repository.getCartItems(uid);
+                return new ResponseEntity<List<CartItemDTO>>(cartItems,HttpStatus.OK);
             }
             else {
                 return new ResponseEntity<String>("Invalid Token",HttpStatus.UNAUTHORIZED);
 
             }
-            
-            return new ResponseEntity<List<CartItemDTO>>(repository.findAll(),HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<String>("Error fetching data",HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("Error fetching data"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     public ResponseEntity<?> addToCartItems(String token, long itemId){
         try {
             if(authService.validateToken(token)) {
                 long uid = authService.getUidFromToken(token);
-                CartItemDTO cartItem = new CartItemDTO();
-                cartItem.setProduct_id(itemId);
-                cartItem.setUid(uid);
-                repository.save(cartItem);
-                return new ResponseEntity<CartItemDTO>(cartItem,HttpStatus.CREATED);
+                if(repository.checkCartItem(uid,itemId)==0){
+                    CartItemDTO cartItem = new CartItemDTO();
+                    cartItem.setProduct_id(itemId);
+                    cartItem.setUid(uid);
+                    repository.save(cartItem);
+                    return new ResponseEntity<CartItemDTO>(cartItem,HttpStatus.CREATED);
+                }
+                else{
+                    return new ResponseEntity<String>("Item already in cart",HttpStatus.BAD_REQUEST);
+                }
             }
             else {
                 return new ResponseEntity<String>("Invalid Token",HttpStatus.UNAUTHORIZED);
