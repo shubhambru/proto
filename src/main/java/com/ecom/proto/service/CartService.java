@@ -41,7 +41,7 @@ public class CartService {
                 cartItem.setProduct_id(itemId);
                 cartItem.setUid(uid);
                 repository.save(cartItem);
-                return new ResponseEntity<CartItemDTO>(cartItem,HttpStatus.CREATED);
+                return new ResponseEntity<String>("Item Added Successfully",HttpStatus.CREATED);
             }
             else {
                 return new ResponseEntity<String>("Invalid Token",HttpStatus.UNAUTHORIZED);
