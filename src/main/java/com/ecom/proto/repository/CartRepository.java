@@ -17,4 +17,7 @@ public interface CartRepository extends JpaRepository<CartItemDTO , String> {
 
     @Query(value = "SELECT COUNT(i) FROM Cart i WHERE i.product_id = :itemID AND i.uid = :uid" , nativeQuery = true)
 	public long checkCartItem(@Param("uid") long uid, @Param("itemID") long itemID);
+
+    @Query(value = "SELECT * FROM Cart i WHERE i.product_id = :itemID AND i.uid = :uid" , nativeQuery = true)
+	public CartItemDTO getCartItem(@Param("uid") long uid, @Param("itemID") long itemID);
 }
