@@ -18,6 +18,7 @@ public class CartService {
 
     @Autowired
     AuthService authService;
+    
     public ResponseEntity<?> getAllCartItems(String token){
         try {
             if(authService.validateToken(token)) {
@@ -33,6 +34,7 @@ public class CartService {
             return new ResponseEntity<String>("Error fetching data"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     public ResponseEntity<?> addToCartItems(String token, long itemId){
         try {
             if(authService.validateToken(token)) {
