@@ -59,4 +59,28 @@ public class CartService {
             return new ResponseEntity<String>("Error fetching data",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public ResponseEntity<?> deleteCartItems(String token, String productID) {
+      try {
+        if(authService.validateToken(token)) {
+            long uid = authService.getUidFromToken(token);
+            CartItemDTO cartItem = repository.getCartItem(uid,Long.parseLong(productID) );
+            if(cartItem != null) {
+                
+                repository.delete(cartItem);
+                return new ResponseEntity<String>("Item has been deleted",HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<String>("Item does not exist",HttpStatus.BAD_REQUEST);
+            }
+        }
+        else {
+            return new ResponseEntity<String>("Invalid Token",HttpStatus.UNAUTHORIZED);
+
+        }
+          
+      } catch (Exception e) {
+          return new ResponseEntity<String>("Error fetching data",HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
 }
