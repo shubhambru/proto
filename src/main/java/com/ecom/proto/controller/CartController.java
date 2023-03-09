@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,9 +29,17 @@ public class CartController{
     public ResponseEntity<?> addToCartItems(@RequestHeader("token") String token, @RequestParam(name = "id") long itemId){
         return service.addToCartItems(token, itemId);
     }
-    @DeleteMapping("/{productID}")
+    @DeleteMapping("{productID}")
     public ResponseEntity<?> deleteCartItems(@RequestHeader("token") String token, @PathVariable long productID) {
         return service.deleteCartItems(token, productID);
+    }
+    @PutMapping("/inc/{productID}")
+    public ResponseEntity<?> increaseCartItems(@RequestHeader("token") String token, @PathVariable long productID) {
+        return service.updateCartItems(token, productID, 1);
+    }
+    @PutMapping("/dec/{productID}")
+    public ResponseEntity<?> decreaseCartItems(@RequestHeader("token") String token, @PathVariable long productID) {
+        return service.updateCartItems(token, productID, -1);
     }
 
 }
