@@ -28,8 +28,8 @@ public class CartController{
     public ResponseEntity<?> addToCartItems(@RequestHeader("token") String token, @RequestParam(name = "id") long itemId){
         return service.addToCartItems(token, itemId);
     }
-    @DeleteMapping("{productID}")
-    public ResponseEntity<?> deleteCartItems(@RequestHeader("token") String token, @PathVariable String productID) {
+    @DeleteMapping("/{productID}")
+    public ResponseEntity<?> deleteCartItems(@RequestHeader("token") String token, @PathVariable long productID) {
         return service.deleteCartItems(token, productID);
     }
 

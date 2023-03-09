@@ -60,13 +60,12 @@ public class CartService {
         }
     }
 
-    public ResponseEntity<?> deleteCartItems(String token, String productID) {
+    public ResponseEntity<?> deleteCartItems(String token, long productID) {
       try {
         if(authService.validateToken(token)) {
             long uid = authService.getUidFromToken(token);
-            CartItemDTO cartItem = repository.getCartItem(uid,Long.parseLong(productID) );
+            CartItemDTO cartItem = repository.getCartItem(uid,productID);
             if(cartItem != null) {
-                
                 repository.delete(cartItem);
                 return new ResponseEntity<String>("Item has been deleted",HttpStatus.OK);
             }
