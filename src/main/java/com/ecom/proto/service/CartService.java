@@ -1,6 +1,8 @@
 package com.ecom.proto.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,13 +10,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ecom.proto.model.CartItemDTO;
+import com.ecom.proto.model.CartProductItem;
+import com.ecom.proto.model.ProductDTO;
 import com.ecom.proto.repository.CartRepository;
+import com.ecom.proto.repository.ProductRepository;
 
 @Service
 public class CartService {
     
     @Autowired
     CartRepository repository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @Autowired
     AuthService authService;
@@ -24,7 +32,12 @@ public class CartService {
             if(authService.validateToken(token)) {
                 long uid = authService.getUidFromToken(token);
                 List<CartItemDTO> cartItems = repository.getCartItems(uid);
-                return new ResponseEntity<List<CartItemDTO>>(cartItems,HttpStatus.OK);
+                List<CartProductItem> cartProductItems = new ArrayList<CartProductItem>();
+                for(CartItemDTO i : cartItems){
+                    Optional<ProductDTO> product = productRepository.findById(String.valueOf(i.getProduct_id()));
+                    cartProductItems.add(new CartProductItem(i.getItem_id(),i.getQuantity(),product.get()));
+                }
+                return new ResponseEntity<List<CartProductItem>>(cartProductItems,HttpStatus.OK);
             }
             else {
                 return new ResponseEntity<String>("Invalid Token",HttpStatus.UNAUTHORIZED);
