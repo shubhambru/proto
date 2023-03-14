@@ -2,8 +2,6 @@ package com.ecom.proto.model;
 
 import java.util.List;
 
-import jakarta.persistence.Entity;
-
 public class CartProductItem {
     
     private long item_id;
