@@ -28,6 +28,7 @@ public class CartProductItem {
         this.price = product.getPrice();
         this.style = product.getStyle();
         this.price = product.getPrice();
+        this.availableSizes = product.getAvailableSizes();
     }
 
     public long getItem_id() {
