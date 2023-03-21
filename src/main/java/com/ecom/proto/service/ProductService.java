@@ -1,5 +1,6 @@
 package com.ecom.proto.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,29 +18,35 @@ public class ProductService {
     @Autowired
     ProductRepository repository;
     
-    public ResponseEntity<?> getAllProducts(){
+    public ResponseEntity<?> getProducts(List<String> sizes, String order){
         try {
-            return new ResponseEntity<List<ProductDTO>>(repository.findAll(),HttpStatus.OK);            
+            List<ProductDTO> products;
+            if(order.equals("ASC_PRICE")){
+                products = repository.findAll(Sort.by(Sort.Direction.ASC, "price"));
+            }
+            else if(order.equals("DSC_PRICE")){
+                products = repository.findAll(Sort.by(Sort.Direction.DESC, "price"));
+            }
+            else{
+                products = repository.findAll();
+            }
+            if(sizes.size()==0){
+                return new ResponseEntity<List<ProductDTO>>(products,HttpStatus.OK);
+            }
+            else{
+                List<ProductDTO> sizedProducts = new ArrayList<ProductDTO>();
+                for(ProductDTO p : products ){
+                    for(String size : sizes){
+                        if(p.getAvailableSizes().contains(size)){
+                            sizedProducts.add(p);
+                            break;
+                        }
+                    }
+                }
+                return new ResponseEntity<List<ProductDTO>>(sizedProducts,HttpStatus.OK);
+            }
         } catch (Exception e) {
             return new ResponseEntity<String>("Error fetching data",HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public ResponseEntity<?> getAllSortProducts(String orderby) {
-        try {
-            if(orderby.equals("asc")) {
-
-                return new ResponseEntity<List<ProductDTO>>(repository.findAll(Sort.by(Sort.Direction.ASC, "price")),HttpStatus.OK);            
-            }
-            else if(orderby.equals("dsc")) {
-
-                return new ResponseEntity<List<ProductDTO>>(repository.findAll(Sort.by(Sort.Direction.DESC, "price")),HttpStatus.OK);            
-            }
-            else {
-                return new ResponseEntity<String>("Pls Mention Order by..",HttpStatus.BAD_REQUEST);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<String>("Error fetching data"+e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
