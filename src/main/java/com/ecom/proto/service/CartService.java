@@ -31,7 +31,7 @@ public class CartService {
         try {
             if(authService.validateToken(token)) {
                 long uid = authService.getUidFromToken(token);
-                List<CartItemDTO> cartItems = repository.getCartItems(uid);
+                List<CartItemDTO> cartItems = repository.findByUid(uid);
                 List<CartProductItem> cartProductItems = new ArrayList<CartProductItem>();
                 for(CartItemDTO i : cartItems){
                     Optional<ProductDTO> product = productRepository.findById(String.valueOf(i.getProduct_id()));
