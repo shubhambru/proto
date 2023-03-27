@@ -45,7 +45,7 @@ public class AddressService {
                     address.getName()!=null && address.getState()!=null && 
                     address.getContactNumber()!=null && address.getType()!=null ){
                         repository.save(address);
-                        return new ResponseEntity<String>("Address added",HttpStatus.OK);
+                        return new ResponseEntity<String>("Address added",HttpStatus.CREATED);
                     }
                 else{
                     return new ResponseEntity<String>("Incomplete data",HttpStatus.BAD_REQUEST);
